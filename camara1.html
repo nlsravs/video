@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera App</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        video {
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #333;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        #imageSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .image-thumbnail {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            cursor: pointer;
+             /* Disable default browser drag and drop behavior */
+        }
+    </style>
+</head>
+<body>
+    <video id="video" playsinline autoplay></video>
+    <button id="startButton">Start Camera</button>
+    <button id="captureButton" disabled>Capture</button>
+    <canvas id="canvas" width="400" height="300"></canvas>
+
+    <!-- Image section -->
+    <section id="imageSection">
+        <img class="image-thumbnail" src="https://tse2.mm.bing.net/th?id=OIP.VIWrPQ9ZJLwwZ8hOSg36lAHaHa&pid=Api&P=0&h=500" alt="Image 1" draggable="true">
+        <img class="image-thumbnail" src="image2.jpg" alt="Image 2" draggable="true">
+        <img class="image-thumbnail" src="image3.jpg" alt="Image 3" draggable="true">
+        <!-- Add more images as needed -->
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const startButton = document.getElementById('startButton');
+            const captureButton = document.getElementById('captureButton');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let stream;
+
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                startButton.addEventListener('click', () => {
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then((videoStream) => {
+                            stream = videoStream;
+                            video.srcObject = stream;
+                            captureButton.disabled = false;
+                        })
+                        .catch((error) => {
+                            console.error('Error accessing camera:', error);
+                        });
+                });
+
+                captureButton.addEventListener('click', () => {
+                    // Draw the current video frame on the canvas
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Convert the canvas content to a data URL and display it
+                    const imageDataURL = canvas.toDataURL('image/png');
+                    const img = new Image();
+                    img.src = imageDataURL;
+
+                    // Display the captured image on the page
+                    document.body.appendChild(img);
+                });
+
+                // Function to handle image drag and drop
+                const handleDragStart = function(event) {
+                    event.dataTransfer.setData('text/plain', event.target.src);
+                };
+
+                video.addEventListener('dragover', function(event) {
+                    event.preventDefault();
+                });
+
+                video.addEventListener('drop', function(event) {
+                    event.preventDefault();
+                    const imageURL = event.dataTransfer.getData('text/plain');
+                    const img = new Image();
+                    img.src = imageURL;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                });
+
+                // Function to handle image click and place it on the camera
+                document.querySelectorAll('.image-thumbnail').forEach(img => {
+                    img.addEventListener('dragstart', handleDragStart);
+                });
+
+            } else {
+                console.error('WebRTC is not supported in this browser');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Missions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://tse2.mm.bing.net/th?id=OIP.VIWrPQ9ZJLwwZ8hOSg36lAHaHa&pid=Api&P=0&h=500'); /* Replace with your new background image path */
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .button {
+            background-color: #138808;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #0B5804;
+        }
+
+        /* Move search container to top left corner */
+        .search-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .search-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-button {
+            background-color: #138808;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #0B5804;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="button-container">
+        <button id="openChandrayaanButton" class="button">check in space</button>
+
+        <script>
+            // JavaScript to open "Chandrayaan-3.html" when the first button is clicked
+            document.getElementById("openChandrayaanButton").addEventListener("click", function() {
+                window.location.href = 'camara1.html'; // Replace with the actual filename
+            });
+        </script>
+
+        <button id="openSuccessButton" class="button">add to cart</button>
+
+        <script>
+            // JavaScript to open "success.html" when the second button is clicked
+            document.getElementById("openSuccessButton").addEventListener("click", function() {
+                window.location.href = 'success.html'; // Replace with the actual filename
+            });
+        </script>
+    </div>
+
+    <!-- Search Bar (moved to top left) -->
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+        <button class="search-button" id="searchTriggerButton">Search</button>
+    </div>
+
+    <script>
+        // JavaScript to trigger button clicks based on search input
+        document.getElementById("searchTriggerButton").addEventListener("click", function() {
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+            
+            if (searchInput === "success") {
+                document.getElementById("openSuccessButton").click();
+            } else if (searchInput === "chandrayaan-3") {
+                document.getElementById("openChandrayaanButton").click();
+            }
+        });
+    </script>
+</body>
+
+</html>
